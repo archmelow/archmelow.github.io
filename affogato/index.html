@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+      content="Affogato introduces a scalable pipeline for open-vocabulary affordance grounding using automatically generated 3D synthetic data, enabling zero-shot generalization to real-world scenarios.">
+  <meta name="keywords" content="Affogato, Affordance Grounding, Open-Vocabulary, 3D Simulation, Robotics, Multimodal Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Affogato: Learning Open-Vocabulary Affordance Grounding with Automated Data Generation at Scale</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" type="image/svg+xml" href="./static/images/favicon_2.jpg?v=2">
+  <link rel="alternate icon" href="./static/images/favicon_2.jpg?v=2">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap" rel="stylesheet">
+
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <!-- <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <!-- <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div> -->
+      </div>
+    </div> 
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            <img src="./static/images/favicon_2.jpg" alt="Affogato Icon" style="height: 1.2em; vertical-align: left; margin-right: 0.0em;">
+            Affogato: Learning Open-Vocabulary Affordance Grounding with Automated Data Generation at Scale</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://junha-l.github.io/">Junha Lee</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=3XWcH2MAAAAJ&hl=ko">Eunha Park</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="https://chrockey.github.io/">Chunghyun Park</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://dahyun-kang.github.io/#">Dahyun Kang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://cvlab.postech.ac.kr/~mcho/">Minsu Cho</a><sup>1,2</sup>,
+            </span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Pohang University of Science and Technology (POSTECH),</span>
+            <span class="author-block"><sup>2</sup>RLWRLD</span>
+          </div>
+
+          <p class="is-size-9 publication-authors" style="margin-top: 0.5rem;">
+            * indicates equal contribution
+          </p>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2506.12009"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2506.12009"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming Soon!)</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/project-affogato/affogato"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./static/images/teaser_v2-1.jpg" alt="Teaser image" style="width: 100%; height: auto;">
+      <h2 class="subtitle has-text-centered", style="font-size: 1.2rem;">
+        <strong>Affogato</strong> is the largest 3D affordance grounding dataset to date.<br>
+        Our dataset provides 150K 3D object instances with open-vocabulary natural text queries paired with spatially 
+        localized heatmap annotations, surpassing all existing datasets in scale and diversity. 
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section" style="background-color: #f5f5f5">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+        <h2 class="title is-3 has-text-centered">Abstract</h2>
+        <div class="content has-text-justified">
+            <p>Affordance grounding-localizing object regions based on natural language descriptions 
+              of interactions-is a critical challenge for enabling intelligent agents to understand and 
+              interact with their environments. 
+              However, this task remains challenging due to the need for fine-grained part-level localization, 
+              the ambiguity arising from multiple valid interaction regions, and the scarcity of large-scale datasets. </p>
+            <p>In this work, we introduce Affogato, 
+              a large-scale benchmark comprising 150K instances, annotated with open-vocabulary text descriptions 
+              and corresponding 3D affordance heatmaps across a diverse set of objects and interactions. 
+              Building on this benchmark, we develop simple yet effective vision-language models that leverage pretrained part-aware vision backbones and a text-conditional heatmap decoder. 
+              Our models trained with the Affogato dataset achieve promising performance on the existing 2D and 3D benchmarks, and notably, exhibit effectiveness in open-vocabulary cross-domain generalization. 
+              The Affogato dataset is shared in public: <a href="https://huggingface.co/datasets/project-affogato/affogato">https://huggingface.co/datasets/project-affogato/affogato.</a></p>
+          </p>
+    </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <div class="content">
+        <h2 class="title is-3">Affogato-Engine</h2>
+        <figure class="image mb-5">
+          <img src="./static/images/method_overview.jpg" 
+               alt="Data Generation Pipeline Diagram" 
+               style="max-width: 100%; height: auto;">
+        </figure>
+        <div class="content has-text-justified">
+            <strong>Affogato-Engine</strong> is a three-stage automated pipeline that generates open-vocabulary affordance annotations for 3D objects by combining vision-language models and multi-view aggregation.
+            <ul>
+              <li><strong>Stage 1. Open-vocabulary affordance query generation</strong>: 
+                Given multi-view images of a 3D object, Gemma3 generates natural language affordance queries via chain-of-thought prompting, conditioned on rendered views.
+              </li>
+              <li><strong>Stage 2. Language-guided interaction point prediction</strong>: 
+                Molmo-predicted points are used as prompts for SAM to generate 2D masks, which are projected and aggregated via voting across views to form 3D affordance heatmaps.
+              </li>
+              <li><strong>Stage 3. Affordance heatmap generation and aggregation</strong>: 
+                Based on Molmo-predicted points, we use SAM to generate segmentation masks, which are aggregated across views into 3D affordance heatmaps via projection and voting.
+              </li>
+              <li><strong>Rendering 2D affordance heatmaps</strong>: 
+                We project the aggregated 3D affordance heatmaps onto 2D image planes to obtain consistent and accurate 2D affordance heatmaps. The resulting 2D data is used to train a 2D affordance grounding model.
+              </li>
+            </ul>
+          
+        </div>
+      </div>
+
+
+    <div class="content">
+
+      <!-- Title -->
+      <h2 class="title is-3">Dataset Analysis</h2>
+      <ul>
+        <li>
+          <strong>Semantic breadth of object classes and affordance queries</strong> : Affogato provides a large and diverse open-vocabulary dataset with over 150K 3D object instances and 750K affordance query–heatmap pairs. 
+          <div class="columns is-centered is-mobile" style="margin-top: 0.1rem; margin-bottom: 0.1rem;">
+            <!-- Left Column -->
+            <div class="column is-half is-flex is-flex-direction-column is-align-items-center">
+              <figure class="image" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                <img src="./static/images/affogato_wordcloud_category.jpg" alt="Object classes" style="max-height: 100%; max-width: 100%;">
+              </figure>
+              <p class="is-size-7 mt-0">Object classes</p>
+            </div>
+
+            <!-- Right Column -->
+            <div class="column is-half is-flex is-flex-direction-column is-align-items-center">
+              <figure class="image" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                <img src="./static/images/affogato_wordcloud_affordance.jpg" alt="Affordance classes" style="max-height: 100%; max-width: 100%;">
+              </figure>
+              <p class="is-size-7 mt-0">Affordance classes</p>
+            </div>
+          </div>
+        
+        
+        </li>
+      
+        <li>
+          <p><strong>High coverage and diversity of affordance annotations</strong> : Our heatmaps capture a wide range of interaction patterns—from fine-grained point interactions 
+          (e.g., pressing a button) to broad surface-level actions (e.g., holding). In terms of both diversity and coverage, Affogato demonstrates significantly stronger performance than existing datasets.</p>
+          </p>
+          <div class="columns is-centered is-mobile", style="margin-top: 0.1rem; margin-bottom: 0.1rem;">
+            <!-- Left Column -->
+            <div class="column is-half is-flex is-flex-direction-column is-align-items-center">
+              <figure class="image" style="height: 120px; display: flex; align-items: center; justify-content: center;">
+                <img src="./static/images/diversity.jpg" alt="Diverse annotations" style="max-height: 100%; max-width: 100%;">
+              </figure>
+              <p class="is-size-7 mt-0">Diverse annotations</p>
+            </div>
+
+            <!-- Right Column -->
+            <div class="column is-half is-flex is-flex-direction-column is-align-items-center">
+              <figure class="image" style="height: 120px; display: flex; align-items: center; justify-content: center;">
+                <img src="./static/images/heatmap_quality.jpg" alt="Heatmap quality" style="max-height: 100%; max-width: 100%;">
+              </figure>
+              <p class="is-size-7 mt-0">Heatmap Quality</p>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <strong>Comparison with prior datasets</strong> : Affogato overcomes key limitations of prior 3D affordance datasets—such as annotation mismatch, incomplete heatmap coverage and insufficient data resolution-by generating dense, semantically aligned heatmaps through an automated pipeline.
+        </li>
+      </ul>
+      
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Model Architecture</h2>
+  
+          <figure class="image mb-5">
+            <img src="./static/images/architecture_v2.jpg" 
+                 alt="Data Generation Pipeline Diagram" 
+                 style="max-width: 100%; height: auto;">
+          </figure>
+          <div class="content has-text-justified">
+            We present Espresso, a minimal yet effective architecture for open-vocabulary affordance grounding.
+            Built upon a shared design, Espresso comes in two variants: Espresso-3D for point clouds and Espresso-2D for images. 
+            Each model comprises a modality-specific visual encoder, a text encoder, and a text-conditioned heatmap decoder. 
+            Instead of using learnable queries, the decoder leverages text embeddings as queries, supporting open-vocabulary affordance
+            grounding without predefined categories.
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+    <div class="columns is-centered ">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Experimental Results</h2>
+
+        <!-- Interpolating. -->
+        <h3 class="title is-4">3D Affordance Grounding</h3>
+        <h4 class="title is-5">Cross-dataset Evaluation</h4>
+        <figure class="image mb-5 has-text-centered">
+          <img src="./static/images/cross_dataset.jpg" 
+               alt="Cross-dataset generalization" 
+               style="max-width: 100%; height: auto;">
+          <p class="is-size-6 mt-2" style="color: #555;">
+            Training on Affogato leads to significantly better cross-dataset generalization due to greater scale and diversity.
+          </p>
+        </figure>
+        
+        <h4 class="title is-5">Open-vocabulary Generalization</h4>
+        <figure class="image mb-5" style="text-align: center;">
+          <img src="./static/images/open_vocab.jpg" 
+               alt="Data Generation Pipeline Diagram" 
+               style="max-width: 70%; height: auto; display: inline-block;">
+          <p class="is-size-6 mt-2" style="color: #555;">Espresso-3D consistently outperforms existing methods on cross-category splits, <br> demonstrating superior generalization capability of model to unseen object categories.</p>
+        </figure>
+        <br/>
+        
+        <h3 class="title is-4">2D Affordance Grounding</h3>
+        <figure class="mb-5 has-text-centered">
+          <div class="columns is-centered is-mobile">
+            <!-- Left Column -->
+            <div class="column is-half is-flex is-flex-direction-column is-align-items-center">
+              <img src="./static/images/2d_zero_shot.jpg" alt="Zero-shot evaluation" style="max-height: 230px; width: auto;">
+              <p class="is-size-7 mt-0">Zero-shot evaluation on AGD20K</p>
+            </div>
+        
+            <!-- Right Column -->
+            <div class="column is-half is-flex is-flex-direction-column is-align-items-center">
+              <img src="./static/images/2d_trained.jpg" alt="Heatmap quality" style="max-height: 230px; width: auto;">
+              <p class="is-size-7 mt-0">Comparison with training data</p>
+            </div>
+          </div>
+        
+          <figcaption class="is-size-6 mt-3" style="color: #555;">
+            Pre-training on the 2D rendered Affogato dataset significantly improves performance on AGD20K, <br> demonstrating strong zero-shot and fine-tuned generalization despite the domain gap.
+          </figcaption>
+        </figure>
+
+        <h3 class="title is-4">Visualizations</h3>
+        <figure class="mb-6">
+          <div class="is-flex is-flex-direction-column is-align-items-center">
+            <img src="./static/images/3d_affordancenet_vs_affogato.jpg" alt="3D AffordanceNet (Top) vs. Affogato-Engine (Bottom)" style="width: 90%; height: auto;">
+            <p class="is-size-8 mt-2">3D AffordanceNet (Top) vs. Affogato-Engine (Bottom)</p>
+          </div>
+        </figure>
+        
+        <figure class="mb-6">
+          <div class="is-flex is-flex-direction-column is-align-items-center">
+            <img src="./static/images/main_qual.jpg" alt="main_qual" style="width: 90%; height: auto;">
+            <p class="is-size-8 mt-2">Qualitative results of Espresso-3D on the LASO test split</p>
+          </div>
+        </figure>
+        
+        <figure class="mb-6">
+          <div class="is-flex is-flex-direction-column is-align-items-center">
+            <img src="./static/images/2d_qual.jpg" alt="2d qual" style="width: 90%; height: auto;">
+            <p class="is-size-8 mt-2">Qualitative results of Espresso-2D (Affogato pretrained, AGD20K-Full fine-tuned) on AGD20K</p>
+          </div>
+        </figure>
+        
+        </figure>
+        
+        
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{lee2025affogato,
+      title={Affogato: Learning Open-Vocabulary Affordance Grounding with Automated Data Generation at Scale},
+      author={Lee, Junha and Park, Eunha and Park, Chunghyun and Kang, Dahyun and Cho, Minsu},
+      journal={arXiv preprint arXiv:2506.12009},
+      year={2025}
+    }</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        Website template adapted from 
+        <a href="https://github.com/nerfies/nerfies.github.io" target="_blank">here</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>
