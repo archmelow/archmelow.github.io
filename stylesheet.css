@@ -144,3 +144,22 @@ span.highlight {
 .timeline-item:last-child::after {
   display: none;
 }
+
+.news-timeline .timeline-item {
+  padding-bottom: 20px;
+}
+
+.news-timeline .timeline-item p {
+  margin: 0;
+}
+
+.news-latest::before {
+  background-color: #16a085 !important;
+  box-shadow: 0 0 0 4px rgba(22, 160, 133, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(22, 160, 133, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(22, 160, 133, 0); }
+}
